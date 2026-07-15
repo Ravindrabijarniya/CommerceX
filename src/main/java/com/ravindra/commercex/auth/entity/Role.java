@@ -1,10 +1,10 @@
 package com.ravindra.commercex.auth.entity;
 
 import com.ravindra.commercex.common.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(
@@ -20,4 +20,7 @@ public class Role extends BaseEntity {
 
     @Column(nullable = false, length = 255)
     private String description;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 }
