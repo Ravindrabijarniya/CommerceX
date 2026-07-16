@@ -4,6 +4,7 @@ import com.ravindra.commercex.auth.dto.request.LoginRequest;
 import com.ravindra.commercex.auth.dto.request.RegisterRequest;
 import com.ravindra.commercex.auth.dto.response.LoginResponse;
 import com.ravindra.commercex.auth.dto.response.RegisterResponse;
+import com.ravindra.commercex.auth.dto.response.UserInfo;
 import com.ravindra.commercex.auth.entity.Role;
 import com.ravindra.commercex.auth.entity.User;
 import com.ravindra.commercex.auth.exception.EmailAlreadyExistsException;
@@ -11,6 +12,8 @@ import com.ravindra.commercex.auth.exception.RoleNotFoundException;
 import com.ravindra.commercex.auth.mapper.UserMapper;
 import com.ravindra.commercex.auth.repository.RoleRepository;
 import com.ravindra.commercex.auth.repository.UserRepository;
+import com.ravindra.commercex.security.jwt.JwtProperties;
+import com.ravindra.commercex.security.jwt.JwtService;
 import com.ravindra.commercex.security.userdetails.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,17 +32,21 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final JwtProperties jwtProperties;
 
 
     public AuthenticationService(
         UserRepository userRepository,
         RoleRepository roleRepository,
-        PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+        PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, JwtProperties jwtProperties) {
 
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.jwtProperties = jwtProperties;
     }
 
 
@@ -93,21 +100,36 @@ public class AuthenticationService {
         CustomUserDetails principal =
             (CustomUserDetails) authentication.getPrincipal();
 
-//        User user = principal.getUser();
+        String token =
+            jwtService.generateAccessToken(principal);
 
         return LoginResponse.builder()
 
-            .id(principal.getId())
+            .accessToken(token)
 
-            .email(principal.getEmail())
+            .tokenType("Bearer")
 
-            .fullName(principal.getFullName()
+            .expiresIn(
+
+                jwtProperties.getAccessTokenExpiration()
+
             )
 
-            .roles(principal.getRoleNames()
-            )
+            .user(
 
-            .message("Login successful")
+                UserInfo.builder()
+
+                    .id(principal.getId())
+
+                    .email(principal.getEmail())
+
+                    .fullName(principal.getFullName())
+
+                    .roles(principal.getRoleNames())
+
+                    .build()
+
+            )
 
             .build();
 

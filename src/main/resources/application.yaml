@@ -9,11 +9,11 @@ spring:
         compose:
             enabled: false
 
-    security:
-        jwt:
-            secret: 8PjN4uY9vX2LmQa5RkT8sW6eH1cF7bZ3NpDsGhJkL9MvCxQr
-            access-token-expiration: 900000
-            refresh-token-expiration: 604800000
+security:
+    jwt:
+        secret: 8PjN4uY9vX2LmQa5RkT8sW6eH1cF7bZ3NpDsGhJkL9MvCxQr
+        access-token-expiration: 900000
+        refresh-token-expiration: 604800000
 
 server:
     port: 8080

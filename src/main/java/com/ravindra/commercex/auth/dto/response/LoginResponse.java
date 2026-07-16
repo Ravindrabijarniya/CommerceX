@@ -9,14 +9,12 @@ import java.util.Set;
 @Builder
 public class LoginResponse {
 
-    private Long id;
+    private String accessToken;
 
-    private String email;
+    private String tokenType;
 
-    private String fullName;
+    private Long expiresIn;
 
-    private Set<String> roles;
-
-    private String message;
+    private UserInfo user;
 
 }
