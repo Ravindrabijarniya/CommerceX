@@ -1,5 +1,7 @@
 package com.ravindra.commercex.security.config;
 
+import com.ravindra.commercex.security.jwt.JwtProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableConfigurationProperties(JwtProperties.class)
 public class SecurityConfiguration {
 
     @Bean
