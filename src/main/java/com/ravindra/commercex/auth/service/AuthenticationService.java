@@ -5,6 +5,7 @@ import com.ravindra.commercex.auth.dto.request.RegisterRequest;
 import com.ravindra.commercex.auth.dto.response.LoginResponse;
 import com.ravindra.commercex.auth.dto.response.RegisterResponse;
 import com.ravindra.commercex.auth.dto.response.UserInfo;
+import com.ravindra.commercex.auth.entity.RefreshToken;
 import com.ravindra.commercex.auth.entity.Role;
 import com.ravindra.commercex.auth.entity.User;
 import com.ravindra.commercex.auth.exception.EmailAlreadyExistsException;
@@ -22,7 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,12 +34,13 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final JwtProperties jwtProperties;
+    private final RefreshTokenService refreshTokenService;
 
 
     public AuthenticationService(
         UserRepository userRepository,
         RoleRepository roleRepository,
-        PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, JwtProperties jwtProperties) {
+        PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, JwtProperties jwtProperties, RefreshTokenService refreshTokenService) {
 
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -47,6 +48,7 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.jwtProperties = jwtProperties;
+        this.refreshTokenService = refreshTokenService;
     }
 
 
@@ -100,23 +102,28 @@ public class AuthenticationService {
         CustomUserDetails principal =
             (CustomUserDetails) authentication.getPrincipal();
 
-        String token =
+        String accessToken =
             jwtService.generateAccessToken(principal);
+
+        RefreshToken refreshToken =
+            refreshTokenService.create(
+                principal.getUser()
+            );
+
 
         return LoginResponse.builder()
 
-            .accessToken(token)
+            .accessToken(accessToken)
+
+            .refreshToken(refreshToken.getToken())
 
             .tokenType("Bearer")
 
             .expiresIn(
-
                 jwtProperties.getAccessTokenExpiration()
-
             )
 
             .user(
-
                 UserInfo.builder()
 
                     .id(principal.getId())
@@ -128,7 +135,6 @@ public class AuthenticationService {
                     .roles(principal.getRoleNames())
 
                     .build()
-
             )
 
             .build();

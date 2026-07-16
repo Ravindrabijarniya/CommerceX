@@ -96,4 +96,7 @@ public final class CustomUserDetails implements UserDetails {
         return !user.isCredentialsExpired();
     }
 
+    public User getUser() {
+        return user;
+    }
 }
