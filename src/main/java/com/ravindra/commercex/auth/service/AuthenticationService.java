@@ -1,6 +1,8 @@
 package com.ravindra.commercex.auth.service;
 
 import com.ravindra.commercex.auth.dto.request.LoginRequest;
+import com.ravindra.commercex.auth.dto.request.LogoutRequest;
+import com.ravindra.commercex.auth.dto.request.RefreshRequest;
 import com.ravindra.commercex.auth.dto.request.RegisterRequest;
 import com.ravindra.commercex.auth.dto.response.LoginResponse;
 import com.ravindra.commercex.auth.dto.response.RegisterResponse;
@@ -138,6 +140,65 @@ public class AuthenticationService {
             )
 
             .build();
+
+    }
+
+    public LoginResponse refresh(RefreshRequest request){
+
+        RefreshToken refreshToken =
+            refreshTokenService.validate(
+                request.getRefreshToken()
+            );
+
+        User user = refreshToken.getUser();
+
+        CustomUserDetails principal =
+            new CustomUserDetails(user);
+
+        String accessToken =
+            jwtService.generateAccessToken(principal);
+
+        RefreshToken newRefreshToken =
+            refreshTokenService.rotate(refreshToken);
+
+        return LoginResponse.builder()
+
+            .accessToken(accessToken)
+
+            .refreshToken(newRefreshToken.getToken())
+
+            .tokenType("Bearer")
+
+            .expiresIn(jwtProperties.getAccessTokenExpiration())
+
+            .user(
+
+                UserInfo.builder()
+
+                    .id(principal.getId())
+
+                    .email(principal.getEmail())
+
+                    .fullName(principal.getFullName())
+
+                    .roles(principal.getRoleNames())
+
+                    .build()
+
+            )
+
+            .build();
+
+    }
+
+    public void logout(LogoutRequest request){
+
+        RefreshToken token =
+            refreshTokenService.validate(
+                request.getRefreshToken()
+            );
+
+        refreshTokenService.revoke(token);
 
     }
 }

@@ -1,6 +1,8 @@
 package com.ravindra.commercex.auth.controller;
 
 import com.ravindra.commercex.auth.dto.request.LoginRequest;
+import com.ravindra.commercex.auth.dto.request.LogoutRequest;
+import com.ravindra.commercex.auth.dto.request.RefreshRequest;
 import com.ravindra.commercex.auth.dto.request.RegisterRequest;
 import com.ravindra.commercex.auth.dto.response.LoginResponse;
 import com.ravindra.commercex.auth.dto.response.RegisterResponse;
@@ -47,6 +49,36 @@ public class AuthenticationController {
             authenticationService.login(request);
 
         return ResponseEntity.ok(response);
+
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refresh(
+
+        @Valid
+
+        @RequestBody
+
+        RefreshRequest request){
+
+        return ResponseEntity.ok(
+
+            authenticationService.refresh(request)
+
+        );
+
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+
+        @RequestBody
+
+        LogoutRequest request){
+
+        authenticationService.logout(request);
+
+        return ResponseEntity.noContent().build();
 
     }
 }

@@ -1,12 +1,12 @@
 package com.ravindra.commercex.common.exception;
 
-import com.ravindra.commercex.auth.exception.EmailAlreadyExistsException;
-import com.ravindra.commercex.auth.exception.RoleNotFoundException;
+import com.ravindra.commercex.auth.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -117,5 +117,38 @@ public class GlobalExceptionHandler {
 
             .body(response);
 
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidRefreshToken(
+        InvalidRefreshTokenException ex) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(ApiErrorResponse.builder()
+                .message(ex.getMessage())
+                .build());
+    }
+
+    @ExceptionHandler(RefreshTokenExpiredException.class)
+    public ResponseEntity<ApiErrorResponse> handleRefreshExpired(
+        RefreshTokenExpiredException ex) {
+
+        return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(
+                ApiErrorResponse.builder()
+                    .message(ex.getMessage())
+                    .build()
+            );
+    }
+
+    @ExceptionHandler(RefreshTokenRevokedException.class)
+    public ResponseEntity<ApiErrorResponse> handleRefreshRevoked(
+        RefreshTokenRevokedException ex) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(ApiErrorResponse.builder()
+                .message(ex.getMessage())
+                .build());
     }
 }

@@ -2,6 +2,9 @@ package com.ravindra.commercex.auth.service;
 
 import com.ravindra.commercex.auth.entity.RefreshToken;
 import com.ravindra.commercex.auth.entity.User;
+import com.ravindra.commercex.auth.exception.InvalidRefreshTokenException;
+import com.ravindra.commercex.auth.exception.RefreshTokenExpiredException;
+import com.ravindra.commercex.auth.exception.RefreshTokenRevokedException;
 import com.ravindra.commercex.auth.repository.RefreshTokenRepository;
 import com.ravindra.commercex.security.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,48 @@ public class RefreshTokenService {
         refreshToken.setRevoked(false);
 
         return repository.save(refreshToken);
+
+    }
+
+    public RefreshToken validate(String token){
+
+        RefreshToken refreshToken =
+            repository.findByToken(token)
+                .orElseThrow(() ->
+                    new InvalidRefreshTokenException(
+                        "Refresh token not found"
+                    )
+
+        );
+
+        if(refreshToken.isRevoked()){
+            throw new RefreshTokenRevokedException(
+                "Refresh token has been revoked"
+            );
+        }
+
+        if(refreshToken.getExpiresAt().isBefore(Instant.now())){
+            throw new RefreshTokenExpiredException(
+                "Refresh token has expired"
+            );
+        }
+
+        return refreshToken;
+    }
+
+    public void revoke(RefreshToken token){
+
+        token.setRevoked(true);
+
+        repository.save(token);
+
+    }
+
+    public RefreshToken rotate(RefreshToken oldToken){
+
+        revoke(oldToken);
+
+        return create(oldToken.getUser());
 
     }
 
