@@ -1,6 +1,8 @@
 package com.ravindra.commercex.auth.controller;
 
+import com.ravindra.commercex.auth.dto.request.LoginRequest;
 import com.ravindra.commercex.auth.dto.request.RegisterRequest;
+import com.ravindra.commercex.auth.dto.response.LoginResponse;
 import com.ravindra.commercex.auth.dto.response.RegisterResponse;
 import com.ravindra.commercex.auth.service.AuthenticationService;
 import jakarta.validation.Valid;
@@ -29,5 +31,22 @@ public class AuthenticationController {
         RegisterResponse response= authenticationService.register(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+
+        @Valid
+
+        @RequestBody
+
+        LoginRequest request){
+
+        LoginResponse response =
+
+            authenticationService.login(request);
+
+        return ResponseEntity.ok(response);
+
     }
 }

@@ -1,11 +1,14 @@
 package com.ravindra.commercex.security.userdetails;
 
+import com.ravindra.commercex.auth.entity.Role;
 import com.ravindra.commercex.auth.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class CustomUserDetails implements UserDetails {
 
@@ -21,6 +24,25 @@ public final class CustomUserDetails implements UserDetails {
 
         return user.getEmail();
 
+    }
+
+    public Long getId() {
+        return user.getId();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    public Set<String> getRoleNames() {
+        return user.getRoles()
+            .stream()
+            .map(Role::getName)
+            .collect(Collectors.toSet());
+    }
+
+    public String getFullName() {
+        return user.getFirstName() + " " + user.getLastName();
     }
 
     @Override

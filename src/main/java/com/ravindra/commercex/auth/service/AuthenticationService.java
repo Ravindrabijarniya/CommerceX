@@ -1,6 +1,8 @@
 package com.ravindra.commercex.auth.service;
 
+import com.ravindra.commercex.auth.dto.request.LoginRequest;
 import com.ravindra.commercex.auth.dto.request.RegisterRequest;
+import com.ravindra.commercex.auth.dto.response.LoginResponse;
 import com.ravindra.commercex.auth.dto.response.RegisterResponse;
 import com.ravindra.commercex.auth.entity.Role;
 import com.ravindra.commercex.auth.entity.User;
@@ -9,9 +11,15 @@ import com.ravindra.commercex.auth.exception.RoleNotFoundException;
 import com.ravindra.commercex.auth.mapper.UserMapper;
 import com.ravindra.commercex.auth.repository.RoleRepository;
 import com.ravindra.commercex.auth.repository.UserRepository;
+import com.ravindra.commercex.security.userdetails.CustomUserDetails;
 import jakarta.transaction.Transactional;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -20,16 +28,18 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
 
     public AuthenticationService(
         UserRepository userRepository,
         RoleRepository roleRepository,
-        PasswordEncoder passwordEncoder) {
+        PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
 
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
 
@@ -61,6 +71,44 @@ public class AuthenticationService {
             .lastName(savedUser.getLastName())
             .email(savedUser.getEmail())
             .message("Registration successful")
+            .build();
+
+    }
+
+    public LoginResponse login(LoginRequest request) {
+
+        Authentication authentication =
+            authenticationManager.authenticate(
+
+                new UsernamePasswordAuthenticationToken(
+
+                    request.getEmail(),
+
+                    request.getPassword()
+
+                )
+
+            );
+
+        CustomUserDetails principal =
+            (CustomUserDetails) authentication.getPrincipal();
+
+//        User user = principal.getUser();
+
+        return LoginResponse.builder()
+
+            .id(principal.getId())
+
+            .email(principal.getEmail())
+
+            .fullName(principal.getFullName()
+            )
+
+            .roles(principal.getRoleNames()
+            )
+
+            .message("Login successful")
+
             .build();
 
     }
