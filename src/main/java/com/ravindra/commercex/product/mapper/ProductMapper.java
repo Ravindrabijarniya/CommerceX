@@ -15,22 +15,6 @@ import java.util.List;
 )
 public interface ProductMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "category", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "version", ignore = true)
-    Product toEntity(CreateProductRequest request);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "category", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "version", ignore = true)
-    void updateEntity(UpdateProductRequest request,
-                      @MappingTarget Product product);
-
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     ProductResponse toResponse(Product product);

@@ -45,8 +45,18 @@ public class ProductServiceImpl
             validator.validateCategoryExists(
                 request.categoryId());
 
-        Product product =
-            mapper.toEntity(request);
+        Product product = Product.create(
+            request.name(),
+            request.slug(),
+            request.shortDescription(),
+            request.description(),
+            request.brand(),
+            request.sku(),
+            request.price(),
+            request.thumbnailUrl(),
+            request.featured(),
+            request.status()
+        );
 
         product.assignCategory(category);
 
@@ -76,7 +86,18 @@ public class ProductServiceImpl
             validator.validateCategoryExists(
                 request.categoryId());
 
-        mapper.updateEntity(request, product);
+        product.update(
+            request.name(),
+            request.slug(),
+            request.shortDescription(),
+            request.description(),
+            request.brand(),
+            request.sku(),
+            request.price(),
+            request.thumbnailUrl(),
+            request.featured(),
+            request.status()
+        );
 
         product.assignCategory(category);
 

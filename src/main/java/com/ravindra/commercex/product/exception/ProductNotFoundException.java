@@ -1,13 +1,14 @@
 package com.ravindra.commercex.product.exception;
 
-public class ProductNotFoundException extends RuntimeException {
+import com.ravindra.commercex.common.exception.ResourceNotFoundException;
 
-    public ProductNotFoundException(Long productId) {
-        super("Product not found with id: " + productId);
+public class ProductNotFoundException extends ResourceNotFoundException {
+
+    public ProductNotFoundException(Long id) {
+        super("Product not found with id: " + id);
     }
 
     public ProductNotFoundException(String slug) {
         super("Product not found with slug: " + slug);
     }
-
 }

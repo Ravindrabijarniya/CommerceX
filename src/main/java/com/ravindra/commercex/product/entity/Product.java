@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Getter
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(

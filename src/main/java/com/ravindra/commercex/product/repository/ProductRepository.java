@@ -19,9 +19,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findBySlug(String slug);
 
-    Optional<Product> findByIdAndStatus(Long id, ProductStatus status);
-
-    Optional<Product> findBySlugAndStatus(String slug, ProductStatus status);
-
     List<Product> findByFeaturedTrueAndStatus(ProductStatus status);
 }

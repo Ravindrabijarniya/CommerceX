@@ -17,11 +17,6 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /*
-     * ==========================
-     * Validation Exceptions
-     * ==========================
-     */
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidation(
@@ -42,11 +37,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /*
-     * ==========================
-     * Authentication Exceptions
-     * ==========================
-     */
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ApiErrorResponse> handleEmailAlreadyExists(
@@ -100,11 +90,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /*
-     * ==========================
-     * Category Exceptions
-     * ==========================
-     */
+
 
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleCategoryNotFound(
@@ -134,7 +120,6 @@ public class GlobalExceptionHandler {
         CategoryHierarchyException.class,
         CategoryStatusException.class,
         CategoryValidationException.class,
-        CategoryHierarchyException.class,
         CategoryDeletionException.class,
         CategoryInUseException.class
     })
@@ -149,11 +134,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /*
-     * ==========================
-     * Fallback
-     * ==========================
-     */
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleException(
@@ -167,11 +148,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /*
-     * ==========================
-     * Helper Methods
-     * ==========================
-     */
+
 
     private ResponseEntity<ApiErrorResponse> buildResponse(
         HttpStatus status,
@@ -205,5 +182,43 @@ public class GlobalExceptionHandler {
             .status(status)
             .body(response);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceNotFound(
+        ResourceNotFoundException ex,
+        HttpServletRequest request) {
+
+        return buildResponse(
+            HttpStatus.NOT_FOUND,
+            ex.getMessage(),
+            request
+        );
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceAlreadyExists(
+        ResourceAlreadyExistsException ex,
+        HttpServletRequest request) {
+
+        return buildResponse(
+            HttpStatus.CONFLICT,
+            ex.getMessage(),
+            request
+        );
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiErrorResponse> handleBusinessException(
+        BusinessException ex,
+        HttpServletRequest request) {
+
+        return buildResponse(
+            HttpStatus.BAD_REQUEST,
+            ex.getMessage(),
+            request
+        );
+    }
+
+
 
 }

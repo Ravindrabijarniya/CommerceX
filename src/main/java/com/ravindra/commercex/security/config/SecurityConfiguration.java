@@ -38,6 +38,9 @@
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/v1/auth/**").permitAll()
                     .requestMatchers("/api/categories/**").permitAll()
+                    .requestMatchers("/api/products/**").permitAll()
+                    .requestMatchers("/api/admin/products/**").permitAll()
+                    .requestMatchers("/actuator/**").permitAll()
                     .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
