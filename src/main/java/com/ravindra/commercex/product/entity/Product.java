@@ -79,4 +79,72 @@ public class Product extends BaseEntity {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    public void assignCategory(Category category) {
+        this.category = category;
+    }
+
+    public static Product create(
+        String name,
+        String slug,
+        String shortDescription,
+        String description,
+        String brand,
+        String sku,
+        BigDecimal price,
+        String thumbnailUrl,
+        boolean featured,
+        ProductStatus status
+    ) {
+        Product product = new Product();
+
+        product.name = name;
+        product.slug = slug;
+        product.shortDescription = shortDescription;
+        product.description = description;
+        product.brand = brand;
+        product.sku = sku;
+        product.price = price;
+        product.thumbnailUrl = thumbnailUrl;
+        product.featured = featured;
+        product.status = status;
+
+        return product;
+    }
+
+    public void update(
+        String name,
+        String slug,
+        String shortDescription,
+        String description,
+        String brand,
+        String sku,
+        BigDecimal price,
+        String thumbnailUrl,
+        boolean featured,
+        ProductStatus status
+    ) {
+        this.name = name;
+        this.slug = slug;
+        this.shortDescription = shortDescription;
+        this.description = description;
+        this.brand = brand;
+        this.sku = sku;
+        this.price = price;
+        this.thumbnailUrl = thumbnailUrl;
+        this.featured = featured;
+        this.status = status;
+    }
+
+    public void changeStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public void markAsFeatured() {
+        this.featured = true;
+    }
+
+    public void removeFeatured() {
+        this.featured = false;
+    }
 }
