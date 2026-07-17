@@ -4,19 +4,16 @@ import com.ravindra.commercex.product.dto.request.CreateProductRequest;
 import com.ravindra.commercex.product.dto.request.UpdateProductRequest;
 import com.ravindra.commercex.product.dto.request.UpdateProductStatusRequest;
 import com.ravindra.commercex.product.dto.response.ProductResponse;
-import com.ravindra.commercex.product.dto.response.ProductSummaryResponse;
 import com.ravindra.commercex.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/admin/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductAdminController {
 
     private final ProductService productService;
 
@@ -43,25 +40,5 @@ public class ProductController {
         @Valid @RequestBody UpdateProductStatusRequest request) {
 
         productService.updateProductStatus(productId, request);
-    }
-
-    @GetMapping("/{productId}")
-    public ProductResponse getProduct(
-        @PathVariable Long productId) {
-
-        return productService.getProduct(productId);
-    }
-
-    @GetMapping("/slug/{slug}")
-    public ProductResponse getProductBySlug(
-        @PathVariable String slug) {
-
-        return productService.getProductBySlug(slug);
-    }
-
-    @GetMapping("/featured")
-    public List<ProductSummaryResponse> getFeaturedProducts() {
-
-        return productService.getFeaturedProducts();
     }
 }
