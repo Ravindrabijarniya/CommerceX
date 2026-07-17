@@ -6,6 +6,8 @@ CREATE TABLE permissions (
 
     description VARCHAR(255),
 
+    version BIGINT NOT NULL DEFAULT 0,
+
     created_at TIMESTAMP,
 
     updated_at TIMESTAMP
