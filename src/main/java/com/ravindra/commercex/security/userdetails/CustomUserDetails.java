@@ -2,6 +2,7 @@ package com.ravindra.commercex.security.userdetails;
 
 import com.ravindra.commercex.auth.entity.Role;
 import com.ravindra.commercex.auth.entity.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +12,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Getter
 public final class CustomUserDetails implements UserDetails {
 
     private final User user;
+
+
 
     public CustomUserDetails(User user){
         this.user = user;
