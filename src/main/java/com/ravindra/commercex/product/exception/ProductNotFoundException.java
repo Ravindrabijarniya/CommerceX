@@ -11,4 +11,5 @@ public class ProductNotFoundException extends ResourceNotFoundException {
     public ProductNotFoundException(String slug) {
         super("Product not found with slug: " + slug);
     }
+
 }

@@ -40,6 +40,7 @@
                     .requestMatchers("/api/categories/**").permitAll()
                     .requestMatchers("/api/products/**").permitAll()
                     .requestMatchers("/api/admin/products/**").permitAll()
+                    .requestMatchers("/api/v1/admin/**").permitAll()
                     .requestMatchers("/actuator/**").permitAll()
                     .anyRequest().authenticated()
                 )
