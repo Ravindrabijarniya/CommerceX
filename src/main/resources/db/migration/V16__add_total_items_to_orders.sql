@@ -1,0 +1,2 @@
+ALTER TABLE orders
+ADD COLUMN total_items INT NOT NULL DEFAULT 0;

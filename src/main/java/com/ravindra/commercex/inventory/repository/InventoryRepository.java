@@ -2,6 +2,7 @@ package com.ravindra.commercex.inventory.repository;
 
 import com.ravindra.commercex.inventory.entity.Inventory;
 import com.ravindra.commercex.inventory.entity.InventoryStatus;
+import com.ravindra.commercex.product.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     List<Inventory> findByStockStatus(InventoryStatus stockStatus);
 
     List<Inventory> findByStockStatusIn(List<InventoryStatus> statuses);
+
+    Optional<Inventory> findByProduct(Product product);
 }

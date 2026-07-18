@@ -1,7 +1,10 @@
 package com.ravindra.commercex.inventory.validation;
 
+import com.ravindra.commercex.cart.entity.Cart;
+import com.ravindra.commercex.cart.entity.CartItem;
 import com.ravindra.commercex.inventory.entity.Inventory;
 import com.ravindra.commercex.inventory.exception.InventoryException;
+import com.ravindra.commercex.inventory.exception.InventoryNotFoundException;
 import com.ravindra.commercex.inventory.repository.InventoryRepository;
 import com.ravindra.commercex.product.entity.Product;
 import com.ravindra.commercex.product.exception.ProductNotFoundException;
@@ -38,5 +41,23 @@ public class InventoryBusinessValidator {
                 new InventoryException(
                     "Inventory not found for product id: " + productId
                 ));
+    }
+
+    public void validateCartInventory(Cart cart) {
+
+        for (CartItem cartItem : cart.getItems()) {
+
+            Inventory inventory = inventoryRepository
+                .findByProduct(cartItem.getProduct())
+                .orElseThrow(() ->
+                    new InventoryNotFoundException(
+                        cartItem.getProduct().getId()
+                    ));
+
+            inventory.validateAvailableQuantity(
+                cartItem.getQuantity()
+            );
+        }
+
     }
 }

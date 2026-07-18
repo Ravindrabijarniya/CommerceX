@@ -111,6 +111,12 @@ public class Cart extends BaseEntity {
         items.remove(item);
     }
 
+    public int getTotalItems() {
+        return items.stream()
+            .mapToInt(CartItem::getQuantity)
+            .sum();
+    }
+
     public void clear() {
         items.clear();
     }

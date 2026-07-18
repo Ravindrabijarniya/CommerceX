@@ -4,6 +4,7 @@ import com.ravindra.commercex.auth.entity.User;
 import com.ravindra.commercex.cart.entity.Cart;
 import com.ravindra.commercex.cart.entity.CartItem;
 import com.ravindra.commercex.cart.exception.CartItemNotFoundException;
+import com.ravindra.commercex.cart.exception.CartNotFoundException;
 import com.ravindra.commercex.cart.repository.CartRepository;
 import com.ravindra.commercex.product.entity.Product;
 import com.ravindra.commercex.product.exception.ProductNotFoundException;
@@ -60,6 +61,11 @@ public class CartBusinessValidator {
         if (!exists) {
             throw new CartItemNotFoundException(productId);
         }
+    }
+
+    public Cart getCart(User user) {
+        return cartRepository.findByUser(user)
+            .orElseThrow(() -> new CartNotFoundException(user.getId()));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.ravindra.commercex.inventory.entity;
 
 import com.ravindra.commercex.common.entity.BaseEntity;
+import com.ravindra.commercex.inventory.exception.InsufficientInventoryException;
 import com.ravindra.commercex.inventory.exception.InventoryException;
 import com.ravindra.commercex.product.entity.Product;
 import jakarta.persistence.*;
@@ -166,6 +167,13 @@ public class Inventory extends BaseEntity {
             throw new InventoryException(
                 "Quantity cannot be negative."
             );
+        }
+    }
+
+    public void validateAvailableQuantity(Integer requestedQuantity) {
+
+        if (stockQuantity < requestedQuantity) {
+            throw new InsufficientInventoryException();
         }
     }
 }
