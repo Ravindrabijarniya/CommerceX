@@ -1,8 +1,9 @@
 package com.ravindra.commercex.common.exception;
 
-public abstract class ResourceNotFoundException extends RuntimeException {
+public abstract class ResourceNotFoundException extends BusinessException {
 
     protected ResourceNotFoundException(String message) {
         super(message);
     }
+
 }

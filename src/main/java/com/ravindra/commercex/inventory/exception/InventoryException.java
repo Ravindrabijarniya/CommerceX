@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 public class InventoryException extends BusinessException {
 
     public InventoryException(String message) {
-        super(message, HttpStatus.BAD_REQUEST);
+        super(message);
     }
 }

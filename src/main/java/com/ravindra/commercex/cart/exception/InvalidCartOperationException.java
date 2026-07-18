@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 public class InvalidCartOperationException extends BusinessException {
 
     public InvalidCartOperationException(String message) {
-        super(message, HttpStatus.BAD_REQUEST);
+        super(message);
     }
 
 }

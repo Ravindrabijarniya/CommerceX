@@ -17,7 +17,6 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidation(
         MethodArgumentNotValidException ex,
@@ -31,16 +30,27 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
             HttpStatus.BAD_REQUEST,
-            "Validation Failed",
+            "Validation failed.",
             request,
             errors
         );
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleNotFound(
+        ResourceNotFoundException ex,
+        HttpServletRequest request) {
 
-    @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<ApiErrorResponse> handleEmailAlreadyExists(
-        EmailAlreadyExistsException ex,
+        return buildResponse(
+            HttpStatus.NOT_FOUND,
+            ex.getMessage(),
+            request
+        );
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleAlreadyExists(
+        ResourceAlreadyExistsException ex,
         HttpServletRequest request) {
 
         return buildResponse(
@@ -50,13 +60,13 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(RoleNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleRoleNotFound(
-        RoleNotFoundException ex,
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiErrorResponse> handleBusinessException(
+        BusinessException ex,
         HttpServletRequest request) {
 
         return buildResponse(
-            HttpStatus.NOT_FOUND,
+            HttpStatus.BAD_REQUEST,
             ex.getMessage(),
             request
         );
@@ -69,72 +79,10 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
             HttpStatus.UNAUTHORIZED,
-            "Invalid email or password",
+            "Invalid email or password.",
             request
         );
     }
-
-    @ExceptionHandler({
-        InvalidRefreshTokenException.class,
-        RefreshTokenExpiredException.class,
-        RefreshTokenRevokedException.class
-    })
-    public ResponseEntity<ApiErrorResponse> handleRefreshTokenExceptions(
-        RuntimeException ex,
-        HttpServletRequest request) {
-
-        return buildResponse(
-            HttpStatus.UNAUTHORIZED,
-            ex.getMessage(),
-            request
-        );
-    }
-
-
-
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleCategoryNotFound(
-        CategoryNotFoundException ex,
-        HttpServletRequest request) {
-
-        return buildResponse(
-            HttpStatus.NOT_FOUND,
-            ex.getMessage(),
-            request
-        );
-    }
-
-    @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public ResponseEntity<ApiErrorResponse> handleCategoryAlreadyExists(
-        CategoryAlreadyExistsException ex,
-        HttpServletRequest request) {
-
-        return buildResponse(
-            HttpStatus.CONFLICT,
-            ex.getMessage(),
-            request
-        );
-    }
-
-    @ExceptionHandler({
-        CategoryHierarchyException.class,
-        CategoryStatusException.class,
-        CategoryValidationException.class,
-        CategoryDeletionException.class,
-        CategoryInUseException.class
-    })
-    public ResponseEntity<ApiErrorResponse> handleCategoryBusinessExceptions(
-        RuntimeException ex,
-        HttpServletRequest request) {
-
-        return buildResponse(
-            HttpStatus.BAD_REQUEST,
-            ex.getMessage(),
-            request
-        );
-    }
-
-
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleException(
@@ -143,11 +91,10 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
             HttpStatus.INTERNAL_SERVER_ERROR,
-            ex.getMessage(),
+            "An unexpected error occurred.",
             request
         );
     }
-
 
 
     private ResponseEntity<ApiErrorResponse> buildResponse(
@@ -182,43 +129,6 @@ public class GlobalExceptionHandler {
             .status(status)
             .body(response);
     }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleResourceNotFound(
-        ResourceNotFoundException ex,
-        HttpServletRequest request) {
-
-        return buildResponse(
-            HttpStatus.NOT_FOUND,
-            ex.getMessage(),
-            request
-        );
-    }
-
-    @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ApiErrorResponse> handleResourceAlreadyExists(
-        ResourceAlreadyExistsException ex,
-        HttpServletRequest request) {
-
-        return buildResponse(
-            HttpStatus.CONFLICT,
-            ex.getMessage(),
-            request
-        );
-    }
-
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiErrorResponse> handleBusinessException(
-        BusinessException ex,
-        HttpServletRequest request) {
-
-        return buildResponse(
-            HttpStatus.BAD_REQUEST,
-            ex.getMessage(),
-            request
-        );
-    }
-
 
 
 }
