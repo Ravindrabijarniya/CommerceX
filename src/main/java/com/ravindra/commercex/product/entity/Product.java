@@ -146,4 +146,10 @@ public class Product extends BaseEntity {
     public void removeFeatured() {
         this.featured = false;
     }
+
+    public boolean isAvailable(){
+
+        return status == ProductStatus.ACTIVE;
+
+    }
 }
