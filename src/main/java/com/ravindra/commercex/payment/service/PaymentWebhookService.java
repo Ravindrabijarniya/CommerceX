@@ -50,7 +50,11 @@ public class PaymentWebhookService {
 
                 payment.getAmount(),
 
-                providerReference
+                providerReference,
+
+                payment.getOrder().getOrderNumber(),
+
+                payment.getOrder().getUser().getId()
             )
         );
     }

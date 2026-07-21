@@ -12,7 +12,10 @@ public record PaymentCompletedEvent(
 
     BigDecimal amount,
 
-    String providerReference
+    String providerReference,
+    String orderNumber,
+
+    Long userId
 
 ) {
 }
