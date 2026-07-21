@@ -12,7 +12,6 @@ import com.ravindra.commercex.auth.entity.Role;
 import com.ravindra.commercex.auth.entity.User;
 import com.ravindra.commercex.auth.exception.EmailAlreadyExistsException;
 import com.ravindra.commercex.auth.exception.RoleNotFoundException;
-import com.ravindra.commercex.auth.mapper.UserMapper;
 import com.ravindra.commercex.auth.repository.RoleRepository;
 import com.ravindra.commercex.auth.repository.UserRepository;
 import com.ravindra.commercex.security.jwt.JwtProperties;
@@ -65,13 +64,18 @@ public class AuthenticationService {
             .orElseThrow(() ->
                 new RoleNotFoundException("ROLE_CUSTOMER"));
 
-        User user = UserMapper.toEntity(request);
+        User user =
+            User.create(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail()
+            );
 
-        user.setPassword(
+        user.changePassword(
             passwordEncoder.encode(request.getPassword())
         );
 
-        user.getRoles().add(customerRole);
+        user.addRole(customerRole);
 
         User savedUser =
             userRepository.save(user);
