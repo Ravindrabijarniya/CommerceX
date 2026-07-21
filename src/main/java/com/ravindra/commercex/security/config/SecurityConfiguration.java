@@ -37,8 +37,6 @@
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/v1/auth/**").permitAll()
-                    .requestMatchers("/api/categories/**").permitAll()
-                    .requestMatchers("/api/products/**").permitAll()
                     .requestMatchers("/api/admin/products/**").permitAll()
                     .requestMatchers("/api/v1/admin/**").permitAll()
                     .requestMatchers("/actuator/**").permitAll()
