@@ -15,30 +15,53 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductAdminController {
 
+
     private final ProductService productService;
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse createProduct(
-        @Valid @RequestBody CreateProductRequest request) {
+        @Valid @RequestBody CreateProductRequest request
+    ) {
 
         return productService.createProduct(request);
     }
 
+
+    @GetMapping("/{productId}")
+    public ProductResponse getProduct(
+        @PathVariable Long productId
+    ) {
+
+        return productService.getProduct(productId);
+    }
+
+
     @PutMapping("/{productId}")
     public ProductResponse updateProduct(
         @PathVariable Long productId,
-        @Valid @RequestBody UpdateProductRequest request) {
+        @Valid @RequestBody UpdateProductRequest request
+    ) {
 
-        return productService.updateProduct(productId, request);
+        return productService.updateProduct(
+            productId,
+            request
+        );
     }
+
 
     @PatchMapping("/{productId}/status")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProductStatus(
         @PathVariable Long productId,
-        @Valid @RequestBody UpdateProductStatusRequest request) {
+        @Valid @RequestBody UpdateProductStatusRequest request
+    ) {
 
-        productService.updateProductStatus(productId, request);
+        productService.updateProductStatus(
+            productId,
+            request
+        );
     }
+
 }

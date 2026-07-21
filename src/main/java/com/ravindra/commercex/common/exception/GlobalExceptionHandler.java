@@ -1,8 +1,10 @@
 package com.ravindra.commercex.common.exception;
 
+import com.ravindra.commercex.admin.exception.InvalidCustomerOperationException;
 import com.ravindra.commercex.auth.exception.*;
 import com.ravindra.commercex.category.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -84,17 +87,17 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleException(
-        Exception ex,
-        HttpServletRequest request) {
-
-        return buildResponse(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "An unexpected error occurred.",
-            request
-        );
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ApiErrorResponse> handleException(
+//        Exception ex,
+//        HttpServletRequest request) {
+//
+//        return buildResponse(
+//            HttpStatus.INTERNAL_SERVER_ERROR,
+//            "An unexpected error occurred.",
+//            request
+//        );
+//    }
 
 
     private ResponseEntity<ApiErrorResponse> buildResponse(
@@ -130,5 +133,34 @@ public class GlobalExceptionHandler {
             .body(response);
     }
 
+    @ExceptionHandler(InvalidCustomerOperationException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidCustomerOperation(
+        InvalidCustomerOperationException ex,
+        HttpServletRequest request
+    ) {
+
+        ApiErrorResponse error = ApiErrorResponse.builder()
+            .status(HttpStatus.BAD_REQUEST.value())
+            .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+            .message(ex.getMessage())
+            .path(request.getRequestURI())
+            .timestamp(LocalDateTime.now())
+            .build();
+
+        return ResponseEntity.badRequest().body(error);
+    }
+
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception ex) {
+
+        ex.printStackTrace();
+
+        log.error("Unexpected exception", ex);
+
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ex.getMessage());
+    }
 
 }

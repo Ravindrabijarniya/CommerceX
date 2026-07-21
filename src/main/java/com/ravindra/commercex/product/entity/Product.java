@@ -136,6 +136,12 @@ public class Product extends BaseEntity {
     }
 
     public void changeStatus(ProductStatus status) {
+        Objects.requireNonNull(status);
+
+        if (this.status == status) {
+            return;
+        }
+
         this.status = status;
     }
 

@@ -69,7 +69,7 @@ public class InventoryServiceImpl implements InventoryService {
 
         inventory.addStock(request.getQuantity());
 
-        inventoryRepository.save(inventory);
+//        inventoryRepository.save(inventory);
 
         return inventoryMapper.toResponse(inventory);
     }
@@ -151,5 +151,7 @@ public class InventoryServiceImpl implements InventoryService {
             .map(inventoryMapper::toResponse)
             .toList();
     }
+
+
 
 }

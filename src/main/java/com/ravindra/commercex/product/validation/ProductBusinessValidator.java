@@ -19,7 +19,8 @@ public class ProductBusinessValidator {
 
     public Product validateProductExists(Long productId) {
 
-        return productRepository.findById(productId)
+        return productRepository
+            .findDetailedById(productId)
             .orElseThrow(() ->
                 new ProductNotFoundException(productId));
     }

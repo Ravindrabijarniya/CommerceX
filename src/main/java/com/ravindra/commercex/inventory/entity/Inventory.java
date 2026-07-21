@@ -176,4 +176,23 @@ public class Inventory extends BaseEntity {
             throw new InsufficientInventoryException();
         }
     }
+
+    public void removeStock(Integer quantity){
+
+        validatePositive(quantity);
+
+
+        if(quantity > getAvailableQuantity()){
+
+            throw new InventoryException(
+                "Cannot remove more than available stock"
+            );
+
+        }
+
+
+        stockQuantity -= quantity;
+
+        updateStockStatus();
+    }
 }

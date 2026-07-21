@@ -15,10 +15,30 @@ public class OrderBusinessValidator {
 
     private final OrderRepository orderRepository;
 
-    public Order getOrder(Long id, User user) {
+    public Order getOrder(
+        Long id,
+        User user
+    ){
 
-        return orderRepository.findByIdAndUser(id, user)
-            .orElseThrow(() -> new OrderNotFoundException(id));
+        return orderRepository
+            .findByIdAndUser(id,user)
+            .orElseThrow(
+                () -> new OrderNotFoundException(id)
+            );
+
+    }
+
+
+    public Order getOrder(
+        Long id
+    ){
+
+        return orderRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new OrderNotFoundException(id)
+            );
+
     }
 
     public Order getOrder(String orderNumber) {

@@ -153,6 +153,30 @@ public class User extends BaseEntity {
     }
 
 
+    public void disableAccount(){
+
+        this.enabled = false;
+
+    }
+
+    public void enableAccount(){
+
+        this.enabled = true;
+
+    }
+
+    public void lockAccount(){
+
+        this.accountLocked = true;
+
+    }
+
+    public void unlockAccount(){
+
+        this.accountLocked = false;
+
+    }
+
 
     public boolean hasRole(
         String roleName
@@ -189,6 +213,12 @@ public class User extends BaseEntity {
 
 
         return value.trim();
+
+    }
+
+    public boolean isActive(){
+
+        return enabled && !accountLocked;
 
     }
 

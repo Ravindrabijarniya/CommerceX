@@ -30,6 +30,9 @@ public interface ProductRepository
     @EntityGraph(attributePaths = "category")
     Optional<Product> findBySlug(String slug);
 
+    @EntityGraph(attributePaths = "category")
+    Optional<Product> findDetailedById(Long id);
+
     List<Product> findByFeaturedTrueAndStatus(ProductStatus status);
 
     @EntityGraph(attributePaths = "category")

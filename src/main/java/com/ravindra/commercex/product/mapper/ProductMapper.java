@@ -1,7 +1,5 @@
 package com.ravindra.commercex.product.mapper;
 
-import com.ravindra.commercex.product.dto.request.CreateProductRequest;
-import com.ravindra.commercex.product.dto.request.UpdateProductRequest;
 import com.ravindra.commercex.product.dto.response.ProductResponse;
 import com.ravindra.commercex.product.dto.response.ProductSummaryResponse;
 import com.ravindra.commercex.product.entity.Product;
